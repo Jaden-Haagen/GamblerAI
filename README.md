@@ -1,0 +1,1 @@
+Blackjack code works except for splits which I haven't tested for now. Currently working in building an AI model that I can train to play blackjack and will commit when finished.
