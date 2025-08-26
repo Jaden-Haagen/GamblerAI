@@ -1,7 +1,7 @@
 import random
 
 class Deck:
-    def __init__(self, numDecks = 1):
+    def __init__(self, numDecks = 2):
         self.cards = self.generate_deck(numDecks)
         self.shuffle_deck()
 
@@ -25,6 +25,12 @@ class Deck:
     #remove a card from the shoe 
     def deal(self):
         return self.cards.pop()
+    
+    def reshuffle(self, numDecks):
+        threshold = (numDecks * 52) * 0.25 #adds cards to shoe when cards get below 25%
+        if len(self.cards) < threshold:
+            self.cards = self.generate_deck(numDecks)
+            self.shuffle_deck()
 
 class Hand:
     def __init__(self, bet=1):
@@ -102,3 +108,7 @@ class BlackjackGame:
                 pass
             case _:
                 raise ValueError("Invalid action")
+            
+    def dealer_play(self, dealerID):
+        while self.players[dealerID]["hand"].get_value() < 17:
+            self.moves(dealerID, 1)
