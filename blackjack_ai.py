@@ -37,12 +37,15 @@ def update_model(model, state, next_state, action, reward, gamma, done):
         target = reward + gamma * np.max(next_q_values[0])
     q_values[0][action] = target
     model.fit(state.reshape(1, -1), q_values, verbose = 0)
+
 #environment size
 state_size = 3 #what the ai needs to analyze(dealer card, player's cards, bet)
 num_actions = 3 #what the AI can do (hit, stand, double) add (split, bet) later
 learning_rate = 0.001 # small number = slow but stable, big number = fast but overshoots frequently
-#model file
-filename = "test_model_v1.keras"
+#File names for model, new model, and game results
+filename = "test_model_v3.keras"
+filesavename = "test_model_v4.keras"
+resultsFile = "blackjack_ai_results_v3.csv"
 """
 #try using an existing model
 if os.path.exists(filename):
@@ -65,7 +68,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate),loss='mse')
 #initialize model
 model = initialize_model(state_size, num_actions, learning_rate, filename)
 
-num_rounds = 1000 #test size (change to 1000+ after everything works)
+num_rounds = 5000 #test size (change to 1000+ after everything works)
 gamma = 0.95 #discount factor (0 = cares about current reward, 1 = cares about future reward)
 epsilon = 0.1 #exploration rate (0 = no exploration only follow model, 1 = always explores new options)
 
@@ -78,10 +81,9 @@ game = BlackjackGame(numDecks, numPlayers)
 dealerID = numPlayers #dealerID is always the last position in the initial list
 #Allow agent to play rounds
 for round in trange(num_rounds, desc = "AI Training Progress"):
-    #print(f"Round #{round+1}")
     #check deck size and add cards if needed
     game.deck.reshuffle(numDecks)
-    #start with bet (AI bet will be 1 until model can play reliably)
+    #start with bet (AI bet will bet 1 until model can play reliably)
     bet = 1
     game.players[0]["hand"].bet = bet
     #deal table
@@ -92,13 +94,15 @@ for round in trange(num_rounds, desc = "AI Training Progress"):
     dealer_card_val = game.players[dealerID]["hand"].cards[0]["value"]#return value of first card in dealer hand
 
     state = np.array([player_cards_val, dealer_card_val, bet], dtype=float)#change this for environment(get_player_val, get_dealer_val, etc)
+    #variables for tracking if player is finished playing and if dealer is dealt a blackjack (natural)
     done = False
-
+    natural = False
     #check for dealer blackjack (no insurance for current game since betting not considered)
     dealer_cards_val = game.players[dealerID]["hand"].get_value()
     if dealer_cards_val == 21:
+        #player and dealer are done playing
         done = True
-
+        natural = True
         #check if player push or lose
         if player_cards_val == 21:
             reward = 0
@@ -112,7 +116,6 @@ for round in trange(num_rounds, desc = "AI Training Progress"):
         model.fit(state.reshape(1, -1), q_values, verbose = 0)
         """
         update_model(model, state, state, 0, reward, gamma, done)
-        continue #skip the rest of the round actions
     
     AI_moves = []
     #loops until AI model chooses to stand or busts
@@ -160,23 +163,28 @@ for round in trange(num_rounds, desc = "AI Training Progress"):
         update_model(model, state, next_state, 0, reward, gamma, done)
         #go to next state
         state = next_state
-    #dealer plays to finish round
+    #dealer plays to finish round if not dealt blackjack
     """
     while game.players[dealerID]["hand"].get_value() < 17:
         game.moves(dealerID, 1)
     """
-    game.dealer_play(dealerID)
-    #Determine if player won,lost,push
-    player_cards_val = game.players[0]["hand"].get_value()
-    dealer_cards_val = game.players[dealerID]["hand"].get_value()
-    if player_cards_val > 21 or (player_cards_val < dealer_cards_val and dealer_cards_val <= 21):
-        reward = -1
-    elif (player_cards_val == 21 and dealer_cards_val != 21) or player_cards_val > dealer_cards_val:
-        reward = 1
-    else:
-        reward = 0 
+    if not natural:
+        #update player cards total
+        player_cards_val = game.players[0]["hand"].get_value()
+        #dealer plays if player didn't bust
+        if player_cards_val <= 21:
+            game.dealer_play(dealerID)
+        #Determine if player won,lost,push
+        dealer_cards_val = game.players[dealerID]["hand"].get_value()
+        if player_cards_val > 21 or (player_cards_val < dealer_cards_val and dealer_cards_val <= 21):
+            reward = -1
+        elif (player_cards_val == 21 and dealer_cards_val != 21) or player_cards_val > dealer_cards_val:
+            reward = 1
+        else:
+            reward = 0 
 
     #final q_val update
+    q_values = model.predict(state.reshape(1, -1), verbose = 0)
     target_q = q_values.copy()
     target_q[0][action] = reward + gamma * 0 #next_q is 0 since no more moves
     #update model
@@ -198,11 +206,11 @@ for round in trange(num_rounds, desc = "AI Training Progress"):
         player["stood"] = 0
 
 #save model
-#filename = "test_model_v1.keras"
-model.save(filename)
+#filesavename = "test_model_v3.keras"
+model.save(filesavename)
 #print(game_data)
 #save game results (stored in csv)
-resultsFile = "blackjack_ai_results.csv"
+#resultsFile = "blackjack_ai_results.csv"
 with open(resultsFile, "w", newline="") as f:
     writer = csv.DictWriter(f, fieldnames=["player_hand", "dealer_hand", "actions", "result"])
     writer.writeheader()
