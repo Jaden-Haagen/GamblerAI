@@ -1,5 +1,6 @@
-from blackjack import BlackjackGame
+from blackjack import BlackjackGame, Hand
 
+import math
 import tensorflow as tf
 import numpy as np
 import csv
@@ -40,18 +41,23 @@ def update_model(model, state, next_state, action, reward, gamma, done):
 
 #Update these parts to change models, training, storage location, etc.
 #File names for model, new model, and game results
-filename = "test_model_v4.keras"
-filesavename = "test_v4.keras"
-resultsFile = "test_results.csv"
+filename = "model_v1.keras"
+filesavename = "model_v2.keras"
+resultsFile = "v2_results.csv"
 
 #environment size
 state_size = 3 #what the ai needs to analyze (dealer card, player's cards, bet)
 num_actions = 4 #what the AI can do (hit, stand, double, split) add bet later
 learning_rate = 0.001 # small number = slow but stable, big number = fast but overshoots frequently
 
-num_rounds = 100 #test size (change to 1000+ after everything works)
+num_rounds = 10000 #test size (change to 1000+ after everything works)
 gamma = 0.95 #discount factor (0 = cares about current reward, 1 = cares about future reward)
 epsilon = 0.1 #exploration rate (0 = no exploration only follow model, 1 = always explores new options)
+#updated for epsilon update at each round (ubove is just a back up value)
+epsilon_start = 0.3 #change if using a pretrained model
+epsilon_min = 0.01
+k = 0.001  # decay speed
+
 
 numDecks = 6
 numPlayers = 1
@@ -70,6 +76,9 @@ game = BlackjackGame(numDecks, numPlayers)
 dealerID = numPlayers #dealerID is always the last position in the initial list (doubles as dealer hand ID)
 #Allow agent to play rounds
 for round in trange(num_rounds, desc = "AI Training Progress"):
+    #update epsilon for model training
+    epsilon = epsilon_min + (epsilon_start - epsilon_min) * math.exp(-k * round)
+    
     #check deck size and add cards if needed
     game.deck.reshuffle(numDecks)
     #start with bet (AI bet will bet 1 until model can play reliably)
@@ -218,7 +227,8 @@ for round in trange(num_rounds, desc = "AI Training Progress"):
     #clear the table
     for hand in game.hands:
         hand.clear()
-
+    #clear the table completely and reset to just two hands
+    game.hands = [Hand() for _ in range(numPlayers+1)]
 #save model as a file
 model.save(filesavename)
 #save game results (stored in csv)

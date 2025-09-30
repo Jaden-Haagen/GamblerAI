@@ -126,13 +126,32 @@ class BlackjackGame:
                     #remove card to create new hand
                     moveCard = self.hands[handID].cards.pop()
                     #create new hand 
-                    self.hands.append(Hand([moveCard])) #new hand with the second card from original hand
+                    new_hand = Hand(bet=self.hands[handID].bet)
+                    new_hand.add_card(moveCard)
+                    self.hands.append(new_hand) #new hand with the second card from original hand is added to the hands list
                     self.players[player]["hands"].append(len(self.hands)-1) #add hand ID to list of player hands
                     #deal cards to hands
                     self.hands[handID].add_card(self.deck.deal())
                     self.hands[len(self.hands)-1].add_card(self.deck.deal())
+                    
+                    #debugging
+                    '''
+                    print("Split debug:")
+                    print("Moved card:", moveCard["value"])
+                    print("Card dealt to original:", self.hands[handID].cards[-1]["value"])
+                    print("Card dealt to new:", self.hands[-1].cards[-1]["value"])
+                    '''
+                    
+                    
                     #update stood list
                     self.players[player]["stood"].append(0)
+                    
+                    #debugging hands
+                    '''
+                    print("After split:")
+                    for idx in [handID, len(self.hands)-1]:
+                        print(f"Hand {idx} cards: {[c['value'] for c in self.hands[idx].cards]}")
+                    '''
                     #play hands
                     return True
                 else:

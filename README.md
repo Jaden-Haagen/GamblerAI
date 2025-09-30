@@ -31,3 +31,10 @@ I used ChatGPT to speed up writing code blocks and fix debugging issues.
 This caused some things to be less than ideal in terms of coding style, but they still work well enough for the project.  
 
 A proper **split function** will be implemented later once the codebase is cleaned up further.
+
+# Models
+
+## V1 Notes
+Trained the AI model on 10000 games. 
+Gamma was 0.95, Epsilon started at 0.3 and followed "epsilon = epsilon_min + (epsilon_start - epsilon_min) * math.exp(-k * round)" until it reached 0.01 with k = 0.001
+Training used 6 decks in the shoe.
