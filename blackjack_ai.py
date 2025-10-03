@@ -41,9 +41,9 @@ def update_model(model, state, next_state, action, reward, gamma, done):
 
 #Update these parts to change models, training, storage location, etc.
 #File names for model, new model, and game results
-filename = "model_v1.keras"
-filesavename = "model_v2.keras"
-resultsFile = "v2_results.csv"
+filename = "model_v3_1.keras"
+filesavename = "model_v4_1.keras"
+resultsFile = "v4_1_results.csv"
 
 #environment size
 state_size = 3 #what the ai needs to analyze (dealer card, player's cards, bet)
@@ -57,6 +57,7 @@ epsilon = 0.1 #exploration rate (0 = no exploration only follow model, 1 = alway
 epsilon_start = 0.3 #change if using a pretrained model
 epsilon_min = 0.01
 k = 0.001  # decay speed
+rounds_trained = num_rounds * 3 #to keep epsilon consistent between training sessions
 
 
 numDecks = 6
@@ -77,7 +78,7 @@ dealerID = numPlayers #dealerID is always the last position in the initial list 
 #Allow agent to play rounds
 for round in trange(num_rounds, desc = "AI Training Progress"):
     #update epsilon for model training
-    epsilon = epsilon_min + (epsilon_start - epsilon_min) * math.exp(-k * round)
+    epsilon = epsilon_min + (epsilon_start - epsilon_min) * math.exp(-k * (round + rounds_trained))
     
     #check deck size and add cards if needed
     game.deck.reshuffle(numDecks)

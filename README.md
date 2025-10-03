@@ -38,3 +38,18 @@ A proper **split function** will be implemented later once the codebase is clean
 Trained the AI model on 10000 games. 
 Gamma was 0.95, Epsilon started at 0.3 and followed "epsilon = epsilon_min + (epsilon_start - epsilon_min) * math.exp(-k * round)" until it reached 0.01 with k = 0.001
 Training used 6 decks in the shoe.
+
+## V2 Notes
+Trained the model on another 10000 games. All settings stayed the same except for starting epsilon value being set to 0.1 instead of 0.3. Model reached a new peak win rate that was better than v1.
+
+## V3 Notes
+Kept setting the same as v2 and trained another 10000 games. Model didn't reach a higher win percentage but improved overall by winning more consistently. 
+
+## V4 Notes
+Kept setting the same and noticed that over 10000 games the win average began dropping.
+
+## V5 Notes
+Ran to see if v4 was just unlucky games and noticed stabilizing under worse conditions
+
+# modified epsilon logic models
+currently running to see how improvments in model are different
