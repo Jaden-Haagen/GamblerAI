@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load your logged data
-data = pd.read_csv("v4_1_results.csv")
+data = pd.read_csv("v6_1_results.csv")
 
 # Moving average win rate
 window = 1000
