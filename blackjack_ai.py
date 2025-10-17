@@ -51,7 +51,7 @@ state_size = 3 #what the ai needs to analyze (dealer card, player's cards, bet)
 num_actions = 4 #what the AI can do (hit, stand, double, split) add bet later
 learning_rate = 0.001 # small number = slow but stable, big number = fast but overshoots frequently
 
-num_rounds = 1000 #test size (change to 1000+ after everything works)
+num_rounds = 100000 #test size (change to 1000+ after everything works)
 gamma = 0.95 #discount factor (0 = cares about current reward, 1 = cares about future reward)
 epsilon = 0.1 #exploration rate (0 = no exploration only follow model, 1 = always explores new options)
 #updated for epsilon update at each round (ubove is just a back up value)

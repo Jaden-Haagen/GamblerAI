@@ -4,10 +4,10 @@ import glob
 import os
 
 # Load your logged data
-data = pd.read_csv("v2_6_results.csv")
+data = pd.read_csv("v2_7_results.csv")
 
 # Moving average win rate
-window = 100
+window = 1000
 plt.figure(figsize=(10, 6))
 
 data['win'] = data['result'] == 1

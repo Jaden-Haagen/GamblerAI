@@ -61,3 +61,7 @@ noticed a drop off at performance improvements that never changed by model 8. Sw
 added neurons to initial layer (32 -> 64)
 added another layer
 v2_5 was trained over 60k games
+v2_7 was trained over 100k games hust to see what would happen
+
+# Note about win percentages
+After programming a basic strategy function and running it over 1 million games I found out that there was an error with the win logic that caused dealer busts to be counted as pushes instead of wins. After adjusting this logic I now need to run through all the saved model data to recalculate wins and see how performance was impacted by this issue.
