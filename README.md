@@ -55,3 +55,9 @@ Ran to see if v4 was just unlucky games and noticed stabilizing under worse cond
 currently running to see how improvments in model are different
 
 noticed a drop off at performance improvements that never changed by model 8. Switched epsilon from .3 to .5 and continued the training with same epsilon decay equation. (may need to modify the model to have more than 2 layers to improve average win percentages)
+
+
+# new model
+added neurons to initial layer (32 -> 64)
+added another layer
+v2_5 was trained over 60k games
