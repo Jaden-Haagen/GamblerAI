@@ -1,7 +1,7 @@
 import pandas as pd
 
-rewrite = "v2_7_results_fixed.csv"
-data = pd.read_csv("v2_7_results.csv")
+rewrite = "Initial_training/vI_5_results_fixed.csv"
+data = pd.read_csv("Initial_training/v5_results.csv")
 
 def get_hand_value(hand):
     cards = hand.split(',')
