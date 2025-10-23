@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd # type: ignore
 
 rewrite = "Initial_training/vI_5_results_fixed.csv"
 data = pd.read_csv("Initial_training/v5_results.csv")

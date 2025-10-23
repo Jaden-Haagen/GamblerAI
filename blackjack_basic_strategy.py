@@ -4,7 +4,7 @@ Strategy for hands in blackjack
 '''
 from blackjack import BlackjackGame, Hand
 import csv
-from tqdm import trange #for progress bar
+from tqdm import trange # type: ignore #for progress bar
 # basic_strategy(game.hands[0], game.hands[dealerID]) #call until a stand is best
 
 

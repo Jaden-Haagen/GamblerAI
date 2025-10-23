@@ -1,11 +1,11 @@
 from blackjack import BlackjackGame, Hand
 
 import math
-import tensorflow as tf
-import numpy as np
+import tensorflow as tf # type: ignore
+import numpy as np # type: ignore
 import csv
 import os
-from tqdm import trange #for progress bar
+from tqdm import trange # type: ignore #for progress bar
 
 
 #function for AI model 
