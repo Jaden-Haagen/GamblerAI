@@ -5,13 +5,13 @@ import os
 
 def plot_win_rate(i: int, show: bool):
     # Load your logged data
-    data = pd.read_csv(f"model_v1/v1_{i}_results_fixed.csv")
-    filename = (f"model_v1/v1_{i}_Win_Percent.png")
+    data = pd.read_csv(f"BS_results.csv")
+    filename = (f"BS_results_Win_Percent.png")
     # Moving average win rate
     window = 1000
     plt.figure(figsize=(10, 6))
-    #data['win'] = data['result'] == 1
-    data['win'] = data['reward'] == 1
+    data['win'] = data['result'] == 1
+    #data['win'] = data['reward'] == 1
     data['win_ma'] = data['win'].rolling(window).mean()
     '''
 
@@ -37,5 +37,5 @@ def plot_win_rate(i: int, show: bool):
     if show:
         plt.show()
 
-for i in range(14, 15):
+for i in range(0, 1):
     plot_win_rate(i, show=False)

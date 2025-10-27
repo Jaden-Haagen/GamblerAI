@@ -35,39 +35,40 @@ The biggest thing I noticed from this project was how LLMs were not always consi
 # Models
 
 ## Initial Training
-### V1 Notes
-Trained the AI model on 10000 games. 
-Gamma was 0.95, Epsilon started at 0.3 and followed "epsilon = epsilon_min + (epsilon_start - epsilon_min) * math.exp(-k * round)" until it reached 0.01 with k = 0.001
-Training used 6 decks in the shoe.
+### Notes
+- AI was trained in 10000 game increments to ensure randomness of cards and smoothen out any unlucky hand results.
 
-### V2 Notes
-Trained the model on another 10000 games. All settings stayed the same except for starting epsilon value being set to 0.1 instead of 0.3. Model reached a new peak win rate that was better than v1.
+- Gamma was 0.95, Epsilon started at 0.3 and followed "epsilon = epsilon_min + (epsilon_start - epsilon_min) * math.exp(-k * round)" until it reached 0.01 with k = 0.001
+- Training used 6 decks in the shoe.
+- In training 1 there was great initial success. With a peak win rate of about 40 percent after learning from 3000 hands. After about 5000 games it appeared to suffer from slight over training or epsilon values as the win precentage dropped slightly and gradually continue to fall. 
+Through the next 20000 games (training 2 and 3) it reached 40 percent win rates but never had the same success. 
+By 40000 and 50000 games (training 4 and 5) it was clearly suffering from overtraining and was becoming more unstable.
 
-### V3 Notes
-Kept setting the same as v2 and trained another 10000 games. Model didn't reach a higher win percentage but improved overall by winning more consistently. 
 
-### V4 Notes
-Kept setting the same and noticed that over 10000 games the win average began dropping.
+## V1 Training
+Designed to see the affects of using a constant epsilon equation through trainings by adding previous rounds trained to the rounds variable in the epsilon equation.
 
-### V5 Notes
-Ran to see if v4 was just unlucky games and noticed stabilizing under worse conditions
-
-## modified epsilon logic models
-currently running to see how improvments in model are different
-
-Noticed a drop off at performance improvements that never changed by model 8. Switched epsilon from .3 to .5 and continued the training with same epsilon decay equation. (may need to modify the model to have more than 2 layers to improve average win percentages)
+With the first training run the model achieved better peak win percentages than the initial model but was slightly less stable. This wasn't as big of an issue though as the model still had plenty of time to learn.
+In the second training the epsilon logic modification proved to work as the model improved its peak win rate to around 44 percent. 
+After training over many more sessions I noticed that while it did suffer from worse performance it didn't just drop and stay low but instead fluctuated and would sometimes return to 40 percent.
 
 
 ## V2 Model
-added neurons to initial layer (32 -> 64)
-added another layer
-v2_5 was trained over 60k games
-v2_7 was trained over 100k games hust to see what would happen
+- added neurons to initial layer (32 -> 64)
+- added another layer
+- v2_5 was trained over 60k games
+- v2_6 was a quick training due to a typo trying to run 100k games
+- v2_7 was trained over 100k games hust to see what would happen
+The added neurons and layers caused training to be less stable initially. After hitting about 40 percent win rate it dropped and stayed below 38 percent for about 64k games.
+With the large number of games trained over the model had started to play with worse win percentages than previous models but would spike up to around 45 percent before dropping again. I think this was more due to overtraining than the changes in the model since the random drastic changes only appear later in training.
 
 # Note about win percentages
 After various training methods and models I decided to program logic for basic strategy to compare the models to. 
-After running it over 1 million games I found out that there was an error with the win logic that caused dealer busts to be counted as pushes instead of wins. Adjusting this logic I found that previous models I trained were performing at the same level as basic strategy which was the goal.
+After running it over 1 million games I found out that there was an error with the win logic that caused dealer busts to be counted as pushes instead of wins.
+This lead to the win percentages being lower than they should've been. After adjusting the logic and recalculating the results for all saved game data I found the percentages increased by around 5 to 10 percent.
+When I compared the basic strategy to the AI models I found they performed about the same at their peak win rates but over all still performed worse than the basic strategy. Now that I am more familiar with training models and making modifications I will see if I can train a model to achieve a peak win rate similar to basic strategy.
 
 # Future Changes
-I build out a python file to load ai models and provide AI recommended moves.
-May build models for other Casino games with more variables and random actions.
+I plan to load ai models and provide AI recommended moves to players during their games.
+
+Design and train AI models that can play other games like roulette and poker.
