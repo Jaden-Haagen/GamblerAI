@@ -29,7 +29,7 @@ This file contains all the classes and functions for various parts of a blackjac
 
 ## Notes
 I used LLMs to speed up writing code blocks, fix debugging issues, and experiment with how LLMs can benefit and hurt programming work flows.  
-The biggest thing I noticed from this project was how LLMs were not always consistant with how they worded comments or code. ChatGPT was better than the integrated copilot model in vs code for with consistancy. Copilot was useful in quickly filing out for loops and if statements but not as helpful when working with repeating unique logic and lists as it would try to find patterns where there weren't any.  
+The biggest thing I noticed from this project was how LLMs were not always consistant with how they worded comments or code. ChatGPT was better than the integrated copilot model in vs code for consistency. Copilot was useful in quickly filing out for loops and if statements but not as helpful when working with repeating unique logic and lists as it would try to find patterns where there weren't any.  
 
 
 # Models
